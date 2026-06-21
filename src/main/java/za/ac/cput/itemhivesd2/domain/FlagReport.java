@@ -4,10 +4,15 @@ package za.ac.cput.itemhivesd2.domain;
 Kelly Pauline Nolte(218275358)
 Date:19.July.2026*/
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.time.LocalDateTime;
 
+@Entity
 public class FlagReport {
 
+    @Id
     private String flagID;
     private String studentID;
     private String listingID;
@@ -16,7 +21,7 @@ public class FlagReport {
     private String status;
     private LocalDateTime dateReported;
 
-    //private constructor
+    //private constructor(Builder pattern)
     private FlagReport(Builder builder){
         this.flagID = builder.flagID;
         this.studentID = builder.studentID;

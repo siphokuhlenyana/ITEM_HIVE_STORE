@@ -5,11 +5,15 @@ package za.ac.cput.itemhivesd2.domain;
 Kelly Pauline Nolte(218275358)
 Date:19.July.2026*/
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.time.LocalDateTime;
 
-
+@Entity
 public class ChatMessage {
 
+    @Id
     private String messageID;
     private String senderID;
     private String receiverID;
