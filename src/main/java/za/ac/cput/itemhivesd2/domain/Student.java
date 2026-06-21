@@ -5,7 +5,7 @@ package za.ac.cput.domain;
    Author: Mihle Nosilela
    Date: 21 June 2026
 */
-
+// Student entity implementation
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
