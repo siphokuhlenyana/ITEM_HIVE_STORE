@@ -7,7 +7,7 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 /*
 Transaction.java
-Transaction model class
+Transaction entity class
 Author:Athini Ngquke(222352302)
 Date: 15 March 2026
  */
@@ -95,14 +95,7 @@ public class Transaction {
         private LocalDate pdate;
         private double total;
 
-        /*public Builder(String transactionId, String buyerId, String sellerId, String listing, double price, LocalDate pdate) {
-            this.transactionId = transactionId;
-            this.buyerId = buyerId;
-            this.sellerId = sellerId;
-            this.listing = listing;
-            this.price = price;
-            this.pdate = pdate;
-        }*/
+        
         public Builder setTransactionId(String transactionId) {
             if(transactionId == null || transactionId.isEmpty()){
                 throw new IllegalArgumentException("transactionId cannot be null or empty");
@@ -178,7 +171,7 @@ public class Transaction {
             UtilValidator.requireNotNullorEmpty(buyerId, "Buyer ID");
             UtilValidator.requireNotNullorEmpty(sellerId, "Seller ID");
             UtilValidator.requireNotNullorEmpty(listing, "Listing");
-           // UtilValidator.requireNotNullorEmpty(String.valueOf(price), "The price");
+           
 
             UtilValidator.requireNoPreviousDate(pdate,"Past date");
             UtilValidator.requireNoFutureDate(pdate,"Future date");
