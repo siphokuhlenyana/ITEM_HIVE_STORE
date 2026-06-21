@@ -59,7 +59,6 @@ public class Category {
             return this;
         }
 
-        // lets you rebuild from an existing Category (handy for updates)
         public Builder copy(Category category) {
             this.categoryId = category.categoryId;
             this.categoryName = category.categoryName;
