@@ -2,7 +2,7 @@ package za.ac.cput.domain;
 
 /* Student.java
    Student Builder
-   Author: Mihle Nosilela
+   Author: Mihle Nosilela (240865537)
    Date: 21 June 2026
 */
 // Student entity implementation
