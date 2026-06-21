@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 
 // Category.java
 // Author: Abongile Phandle (230670849)
-// Date: March 2026
+// Date: June 2026
 
 @Entity
 @Table(name = "category")
