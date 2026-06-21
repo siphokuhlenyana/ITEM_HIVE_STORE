@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "admin")
 public class Admin {
 
     @Id
