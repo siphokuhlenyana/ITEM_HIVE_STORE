@@ -1,4 +1,4 @@
-package za.ac.cput.itemhivesd2.Domain;
+package za.ac.cput.itemhivesd2.domain;
 
 /*Flag Report Domain Class
 Kelly Pauline Nolte(218275358)

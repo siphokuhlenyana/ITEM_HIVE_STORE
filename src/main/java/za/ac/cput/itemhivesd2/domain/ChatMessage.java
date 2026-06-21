@@ -1,4 +1,4 @@
-package za.ac.cput.itemhivesd2.Domain;
+package za.ac.cput.itemhivesd2.domain;
 
 
 /*Chat Message Domain Class
