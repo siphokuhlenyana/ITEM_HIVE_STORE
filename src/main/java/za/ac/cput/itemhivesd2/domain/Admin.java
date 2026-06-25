@@ -1,10 +1,4 @@
-
-/* Admin.java
-    Admin + Builder
-     Author: Siphokuhle Nyana (218123191)
-
-     Date: 21 June 2026
-*/ 
+ 
 
 package za.ac.cput.itemhivesd2.domain;
 
@@ -20,7 +14,7 @@ import java.util.List;
 public class Admin {
 
     @Id
-    private String  admniID;
+    private String  adminID   ;
 
     private  String name ;
     private String email;
@@ -34,20 +28,15 @@ private List<Admin> admins = new ArrayList<>();
 
 protected Admin() {}
 
-public String getAdminID(){return adminID};
-public String getName(){ return name};
-public String getEmail(){return email};
-
-
 
 private Admin(Builder builder) {
-    this.admniID = builder.admniID;
+    this.adminID   = builder.adminID   ;
     this.name = builder.name;
     this.email = builder.email;
     this.password = builder.password;
 }
 public String getAdminID() {
-    return admniID;
+    return adminID;
 }
 
 public String getName() {
@@ -67,14 +56,14 @@ public List<Admin> getOrders() {
 }
 
 public static class Builder{
-    private String  admniID;
+    private String  adminID;
 
     private  String name ;
     private String email;
     private String password ;
 
     public Builder adminID(String adminID){
-        this.admniID = adminID;
+        this.adminID = adminID;
         return this;
 
     }
@@ -84,6 +73,12 @@ public static class Builder{
         return this;
 
     }
+    public Builder email(String email){
+        this.email = email;
+        return this;
+
+    }
+
 
     public Builder password(String password){
         this.password = password;
