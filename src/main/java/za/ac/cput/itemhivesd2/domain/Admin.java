@@ -1,4 +1,8 @@
- 
+ /* Admin.java
+    Admin + Builder
+     Author: Siphokuhle Nyana (218123191)
+     Date: 21 June 2026
+*/ 
 
 package za.ac.cput.itemhivesd2.domain;
 
