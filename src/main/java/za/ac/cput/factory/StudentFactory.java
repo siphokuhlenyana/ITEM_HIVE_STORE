@@ -6,24 +6,37 @@ Student Factory
  */
 
 import za.ac.cput.domain.Student;
+import za.ac.cput.util.Helper;
+
+import java.util.UUID;
 
 public class StudentFactory {
 
-    public static Student createStudent(String studentID,
-                                        String name,
+    public static Student createStudent(String name,
                                         String email,
                                         String password) {
 
-        if (studentID == null || name == null || email == null || password == null) {
-            return null;
+        if (Helper.isNullOrEmpty(name)) {
+            throw new IllegalArgumentException("Name is required");
+        }
+
+        if (Helper.isNullOrEmpty(email)) {
+            throw new IllegalArgumentException("Email is required");
+        }
+
+        if (Helper.isNullOrEmpty(password)) {
+            throw new IllegalArgumentException("Password is required");
         }
 
         return new Student.Builder()
-                .studentID(studentID)
+                .studentID(generateStudentID())
                 .name(name)
                 .email(email)
                 .password(password)
                 .build();
     }
-}
 
+    private static String generateStudentID() {
+        return "STU-" + UUID.randomUUID().toString();
+    }
+}
