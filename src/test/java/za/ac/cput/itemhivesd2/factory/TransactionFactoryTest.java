@@ -9,7 +9,12 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+/*
+Transaction.java
+Transaction factory test class
+Author:Athini Ngquke(222352302)
+Date: 28 March 2026
+ */
 public class TransactionFactoryTest {
     @Test
     void TransactionFactory() {
