@@ -1,0 +1,49 @@
+package za.ac.cput.transactionentity.serviceTest;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import za.ac.cput.transactionentity.controller.TransactionController;
+import za.ac.cput.transactionentity.domain.Transaction;
+import za.ac.cput.transactionentity.repository.TransactionRepository;
+import za.ac.cput.transactionentity.service.TransactionService;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+public class TransactionServiceTest {
+    @Mock
+    private TransactionRepository repository;
+
+    @InjectMocks
+    private TransactionService service;
+
+    @Test
+    void testReadTransaction(){
+        Transaction record= new Transaction.Builder()
+                .setTransactionId("PR-100")
+                .setBuyerId("BI-100")
+                .setSellerId("SI-100")
+                .setListing("LI-100")
+                .setQuantity(65)
+                .setPrice(5000)
+                .setTotal(5000)
+                .setPdate(null)
+                .build();
+        when(repository.findById("PR-100")).thenReturn(Optional.of(record));
+        Transaction result = (Transaction)service.read("PR-100");
+
+        assertNotNull(result);
+        assertEquals("PR-100",result.getTransactionId());
+        assertEquals(65,result.getQuantity());
+    }
+}
