@@ -5,7 +5,12 @@ import za.ac.cput.transactionentity.factory.TransactionFactory;
 import za.ac.cput.transactionentity.repository.TransactionRepository;
 
 import java.util.List;
-
+/*
+Transaction.java
+Transaction service class
+Author:Athini Ngquke(222352302)
+Date: 28 March 2026
+ */
 public class TransactionService implements ITransactionService{
     private final TransactionRepository trans;
 
