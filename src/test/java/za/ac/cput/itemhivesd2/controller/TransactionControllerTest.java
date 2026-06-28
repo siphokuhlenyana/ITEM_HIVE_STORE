@@ -13,6 +13,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+/*
+Transaction.java
+Transaction controller test
+Author:Athini Ngquke(222352302)
+Date: 28 March 2026
+ */
 @ExtendWith(MockitoExtension.class)
 public class TransactionControllerTest {
     @Mock
