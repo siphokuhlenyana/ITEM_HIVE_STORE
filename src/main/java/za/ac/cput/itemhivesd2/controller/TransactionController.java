@@ -5,7 +5,12 @@ import za.ac.cput.transactionentity.domain.Transaction;
 import za.ac.cput.transactionentity.service.TransactionService;
 
 import java.util.List;
-
+/*
+Transaction.java
+Transaction controller class
+Author:Athini Ngquke(222352302)
+Date: 28 March 2026
+ */
 @RestController
 @RequestMapping("api/transaction")
 public class TransactionController {
