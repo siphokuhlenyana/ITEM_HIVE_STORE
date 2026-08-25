@@ -1,0 +1,16 @@
+const handleCheckout = async () => {
+  const response = await fetch("http://localhost:8080/api/payments/checkout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      buyerId: "B001",
+      listingId: "L001",
+      quantity: 2
+    })
+  });
+
+  const data = await response.json();
+  window.location.href = data.url;
+};
