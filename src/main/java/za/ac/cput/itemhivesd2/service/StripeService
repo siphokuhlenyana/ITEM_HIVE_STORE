@@ -1,0 +1,54 @@
+package za.ac.cput.transactionentity.service;
+
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
+import com.stripe.param.checkout.SessionCreateParams;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import za.ac.cput.transactionentity.domain.Transaction;
+
+import java.math.BigDecimal;
+
+@Service
+public class StripeService {
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
+
+    public Session createCheckoutSession(Transaction transaction, String productName) throws StripeException {
+        long unitAmountInCents = BigDecimal.valueOf(transaction.getPrice())
+                .multiply(BigDecimal.valueOf(100))
+                .longValue();
+
+        SessionCreateParams.LineItem.PriceData.ProductData productData =
+                SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                        .setName(productName)
+                        .build();
+
+        SessionCreateParams.LineItem.PriceData priceData =
+                SessionCreateParams.LineItem.PriceData.builder()
+                        .setCurrency("zar")
+                        .setUnitAmount(unitAmountInCents)
+                        .setProductData(productData)
+                        .build();
+
+        SessionCreateParams.LineItem lineItem =
+                SessionCreateParams.LineItem.builder()
+                        .setQuantity((long) transaction.quantity())
+                        .setPriceData(priceData)
+                        .build();
+
+        SessionCreateParams params =
+                SessionCreateParams.builder()
+                        .setMode(SessionCreateParams.Mode.PAYMENT)
+                        .setSuccessUrl(frontendUrl + "/payment-success?session_id={CHECKOUT_SESSION_ID}")
+                        .setCancelUrl(frontendUrl + "/payment-cancel")
+                        .addLineItem(lineItem)
+                        .putMetadata("transactionId", transaction.getTransactionId())
+                        .putMetadata("listingId", transaction.getListing().getListingId())
+                        .putMetadata("buyerId", transaction.getBuyerId().getBuyerId())
+                        .build();
+
+        return Session.create(params);
+    }
+}
