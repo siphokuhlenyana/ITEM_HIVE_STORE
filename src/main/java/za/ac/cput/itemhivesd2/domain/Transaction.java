@@ -65,7 +65,7 @@ public class Transaction {
 
         return listing;
     }
-    public int quantity(){
+    public int getQuantity(){
         
         return quantity;
     }
