@@ -1,0 +1,91 @@
+package za.ac.cput.transactionentity.service;
+
+import com.stripe.exception.StripeException;
+import com.stripe.model.checkout.Session;
+import org.springframework.stereotype.Service;
+import za.ac.cput.transactionentity.domain.Transaction;
+import za.ac.cput.transactionentity.dto.CheckoutRequest;
+import za.ac.cput.transactionentity.repository.TransactionRepository;
+import za.ac.cput.listing.repository.ListingRepository;
+import za.ac.cput.buyer.repository.BuyerRepository;
+import za.ac.cput.listing.domain.Listing;
+import za.ac.cput.buyer.domain.Buyer;
+
+import java.time.LocalDate;
+
+@Service
+public class TransactionService implements ITransactionService {
+
+    private final TransactionRepository trans;
+    private final ListingRepository listingRepository;
+    private final BuyerRepository buyerRepository;
+    private final StripeService stripeService;
+
+    public TransactionService(TransactionRepository trans,
+                              ListingRepository listingRepository,
+                              BuyerRepository buyerRepository,
+                              StripeService stripeService) {
+        this.trans = trans;
+        this.listingRepository = listingRepository;
+        this.buyerRepository = buyerRepository;
+        this.stripeService = stripeService;
+    }
+
+    public String createCheckoutSession(CheckoutRequest request) throws StripeException {
+        Listing listing = listingRepository.findById(request.getListingId())
+                .orElseThrow(() -> new RuntimeException("Listing not found"));
+
+        Buyer buyer = buyerRepository.findById(request.getBuyerId())
+                .orElseThrow(() -> new RuntimeException("Buyer not found"));
+
+        int quantity = request.getQuantity();
+        double price = listing.getPrice();
+        double total = price * quantity;
+
+        Transaction transaction = new Transaction.Builder()
+                .setTransactionId("temp")
+                .setBuyerId(buyer)
+                .setSellerId(listing.getSeller())
+                .setListing(listing)
+                .setQuantity(quantity)
+                .setPrice(price)
+                .setTotal(total)
+                .setPdate(LocalDate.now())
+                .build();
+
+        transaction.setPaymentStatus("PENDING");
+        Transaction savedTransaction = trans.save(transaction);
+
+        Session session = stripeService.createCheckoutSession(savedTransaction, listing.getTitle());
+
+        savedTransaction.setStripeSessionId(session.getId());
+        trans.save(savedTransaction);
+
+        return session.getUrl();
+    }
+
+    @Override
+    public Transaction create(Transaction record) {
+        return trans.save(record);
+    }
+
+    @Override
+    public Transaction update(Transaction record) {
+        return trans.save(record);
+    }
+
+    @Override
+    public Transaction read(String id) {
+        return trans.findById(id).orElse(null);
+    }
+
+    @Override
+    public java.util.List<Transaction> getAll() {
+        return trans.findAll();
+    }
+
+    @Override
+    public void delete(String id) {
+        trans.deleteById(id);
+    }
+}
