@@ -27,11 +27,11 @@ public class TransactionController {
     public Transaction update(@RequestBody Transaction record){
         return serv.update(record);
     }
-    @GetMapping
+    @GetMapping("/{id}")
     public Transaction read(@PathVariable String id){
         return serv.read(id);
     }
-    @GetMapping
+    @GetMapping("/all")
     public List<Transaction> getAll(){
         return serv.getAll();
     }
