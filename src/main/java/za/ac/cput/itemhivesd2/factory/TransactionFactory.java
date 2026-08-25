@@ -19,13 +19,13 @@ public class TransactionFactory {
         if(Helper.isNullOrEmpty(transactionId)){
             throw new IllegalArgumentException("Id cannot be null");
         }
-        if(buyerId == null)){
+        if(buyerId == null){
             throw new IllegalArgumentException("Id cannot be null");
         }
         if(sellerId == null){
             throw new IllegalArgumentException("Id cannot be null");
         }
-        if(listing == null)){
+        if(listing == null){
             throw new IllegalArgumentException("Id cannot be null");
         }
         if(quantity<0){
