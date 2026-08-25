@@ -29,7 +29,10 @@ public class Transaction {
     private double price;
     private double total;
     private LocalDate pdate;
-
+    private String paymentStatus;
+    private String stripeSessionId;
+    private String stripePaymentIntentId;
+    
     public Transaction(Builder builder) {
         this.transactionId = builder.transactionId;
         this.buyerId = builder.buyerId;
@@ -39,6 +42,9 @@ public class Transaction {
         this.price = builder.price;
         this.pdate = builder.pdate;
         this.total = builder.total;
+        this.paymentStatus = paymentStatus;
+        this.stripeSessionId = stripeSessionId;
+        this.stripePaymentIntentId = stripePaymentIntentId;
     }
 
     public String getTransactionId() {
