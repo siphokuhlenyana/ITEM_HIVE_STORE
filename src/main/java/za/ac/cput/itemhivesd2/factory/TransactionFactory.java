@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class TransactionFactory {
-    public static Transaction createTransaction(String transactionId, BuyerId buyerId, SellerId sellerId, Listing listing, int quantity,double price,double total, LocalDate pdate) {
+    public static Transaction createTransaction(String transactionId, Buyer buyerId, Seller sellerId, Listing listing, int quantity,double price,double total, LocalDate pdate) {
         if(Helper.isNullOrEmpty(transactionId)){
             throw new IllegalArgumentException("Id cannot be null");
         }
