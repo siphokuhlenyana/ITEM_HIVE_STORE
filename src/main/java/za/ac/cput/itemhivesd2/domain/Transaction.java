@@ -84,11 +84,28 @@ public class Transaction {
     public void calculateTotal(){
         total = quantity*price;
     }
-    
+     public String getPaymentStatus(){
+         return paymentStatus;
+     }
+    public void setPaymentStatus(){
+       this.paymentStatus = paymentStatus;
+    }
+    public String getStripeSessionId(){
+         return stripeSessionId;
+     }
+    public void setStripeSessionId(){
+       this.stripeSessionId = stripeSessionId;
+    }
+    public String getStripePaymentIntentId(){
+         return stripePaymentIntentId;
+     }
+    public void setStripePaymentIntentId(){
+       this.stripePaymentIntentId = stripePaymentIntentId;
+    }
     @Override
     public String toString() {
         return"Transaction [transactionId=" + transactionId + ", buyerId=" + buyerId + ", sellerId=" + sellerId
-                + ", listing=" + listing +", quantity=" + quantity + ", price=" + price + ", pdate=" + pdate +", total=" + total + "]";
+                + ", listing=" + listing +", quantity=" + quantity + ", price=" + price + ", pdate=" + pdate +", total=" + total + ",]";
     }
 
     public static class Builder {
