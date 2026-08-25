@@ -11,6 +11,7 @@ Transaction service class
 Author:Athini Ngquke(222352302)
 Date: 28 March 2026
  */
+@Service
 public class TransactionService implements ITransactionService{
     private final TransactionRepository trans;
 
