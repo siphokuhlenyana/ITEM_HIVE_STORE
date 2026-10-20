@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { load, save } from "/utils/storage";
+import { save } from "../../utils/storage";
+import { api } from "../../utils/api";
 import logo from "../assets/images/itemHive_logo.jpeg";
 
 const inputClass = (hasError) =>
@@ -32,30 +33,38 @@ export default function StudentLogin() {
         return er;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const er = validate();
         setErrors(er);
         if (Object.keys(er).length) return;
 
         setLoading(true);
-        // Simulated sign-in (demo): registered users are checked, others are accepted.
-        setTimeout(() => {
-            const users = load("itemhive_users", []);
-            const email = form.email.trim().toLowerCase();
-            const match = users.find((u) => u.email.toLowerCase() === email);
-            if (match && match.password !== form.password) {
-                setLoading(false);
-                setFormError("Incorrect email or password. Try again.");
+        const email = form.email.trim();
+        try {
+            const data = await api("/api/auth/login", {
+                method: "POST",
+                auth: false,
+                body: { email, password: form.password },
+            });
+            save("itemhive_session", {
+                token: data.token,
+                email: data.email,
+                name: data.name,
+                role: data.role,
+            });
+            navigate("/");
+        } catch (err) {
+            if (err.status === 403) {
+                // Correct password but the email has not been verified yet.
+                navigate(`/verify-email?email=${encodeURIComponent(email)}`);
                 return;
             }
-            save("itemhive_session", {
-                email: form.email.trim(),
-                name: match?.name || form.email.split("@")[0],
-                role: "student",
-            });
-            navigate("/home");
-        }, 900);
+            setFormError(
+                err.status === 401 ? "Incorrect email or password. Try again." : err.message
+            );
+            setLoading(false);
+        }
     };
 
     return (

@@ -1,6 +1,6 @@
-package za.ac.cput.domain;
+package za.ac.cput.itemhivesd2.domain;
 
-import za.ac.cput.util.UtilValidator;
+import za.ac.cput.itemhivesd2.util.UtilValidator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;

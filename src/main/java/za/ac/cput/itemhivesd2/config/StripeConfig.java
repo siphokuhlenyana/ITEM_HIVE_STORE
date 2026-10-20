@@ -1,4 +1,4 @@
-package za.ac.cput.config;
+package za.ac.cput.itemhivesd2.config;
 
 import com.stripe.Stripe;
 import jakarta.annotation.PostConstruct;

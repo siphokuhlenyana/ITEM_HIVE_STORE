@@ -1,4 +1,4 @@
-package za.ac.cput.domain;
+package za.ac.cput.itemhivesd2.domain;
 /*
 ListingGeneratorId.java
 Listing Generator model class

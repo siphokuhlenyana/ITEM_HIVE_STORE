@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { load, save } from "/utils/storage";
+import { api } from "../../utils/api";
 
 const fields = [
     { name: "firstName", label: "First name", type: "text", placeholder: "First name" },
@@ -24,11 +24,14 @@ export default function StudentRegister() {
         email: "", phone: "", address: "", password: "",
     });
     const [errors, setErrors] = useState({});
+    const [formError, setFormError] = useState("");
+    const [submitting, setSubmitting] = useState(false);
 
     const update = (e) => {
         const { name, value } = e.target;
         setForm((f) => ({ ...f, [name]: value }));
         setErrors((er) => ({ ...er, [name]: "" }));
+        setFormError("");
     };
 
     const validate = () => {
@@ -43,30 +46,34 @@ export default function StudentRegister() {
         return er;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const er = validate();
         setErrors(er);
         if (Object.keys(er).length) return;
 
-        const users = load("itemhive_users", []);
-        if (users.some((u) => u.email.toLowerCase() === form.email.trim().toLowerCase())) {
-            setErrors({ email: "An account with this email already exists." });
-            return;
+        setSubmitting(true);
+        const email = form.email.trim().toLowerCase();
+        try {
+            await api("/api/auth/register", {
+                method: "POST",
+                auth: false,
+                body: {
+                    firstName: form.firstName.trim(),
+                    lastName: form.lastName.trim(),
+                    studentNumber: form.studentNumber.trim(),
+                    email,
+                    phone: form.phone.trim(),
+                    address: form.address.trim(),
+                    password: form.password,
+                },
+            });
+            navigate(`/verify-email?email=${encodeURIComponent(email)}`);
+        } catch (err) {
+            if (err.status === 409) setErrors({ email: err.message });
+            else setFormError(err.message);
+            setSubmitting(false);
         }
-
-        save("itemhive_users", [
-            ...users,
-            {
-                name: `${form.firstName.trim()} ${form.lastName.trim()}`,
-                email: form.email.trim(),
-                password: form.password,
-                studentNumber: form.studentNumber.trim(),
-                phone: form.phone.trim(),
-                address: form.address.trim(),
-            },
-        ]);
-        navigate("/student-login");
     };
 
     return (
@@ -77,6 +84,12 @@ export default function StudentRegister() {
                 className="w-full max-w-lg rounded-xl border border-gray-200 bg-white p-8 shadow-sm"
             >
                 <h1 className="mb-6 text-center text-2xl font-bold text-gray-900">Student Registration</h1>
+
+                {formError && (
+                    <div role="alert" className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">
+                        {formError}
+                    </div>
+                )}
 
                 <div className="grid gap-4 sm:grid-cols-2">
                     {fields.map((f) => (
@@ -97,8 +110,11 @@ export default function StudentRegister() {
                     ))}
                 </div>
 
-                <button className="mt-6 w-full rounded-lg bg-black p-3 text-white transition hover:bg-amber-700">
-                    Create Account
+                <button
+                    disabled={submitting}
+                    className="mt-6 w-full rounded-lg bg-black p-3 text-white transition hover:bg-amber-700 disabled:opacity-50"
+                >
+                    {submitting ? "Creating account…" : "Create Account"}
                 </button>
 
                 <p className="mt-4 text-center text-sm text-gray-500">

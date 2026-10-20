@@ -1,7 +1,12 @@
-import { Navigate, useNavigate } from "react-router-dom";
-import { load, remove } from "/utils/storage";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { load, remove } from "../../utils/storage";
 
-const options = ["Edit Profile", "Saved Payment Methods", "Notifications", "Language Preference"];
+const options = [
+    { label: "Edit Profile", to: "/profile/edit" },
+    { label: "Saved Payment Methods", to: "/profile/payment-methods" },
+    { label: "Notifications", to: "/profile/notifications" },
+    { label: "Language Preference", to: "/profile/language" },
+];
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -36,12 +41,13 @@ export default function Profile() {
 
                 <div className="mt-6 space-y-3 text-left">
                     {options.map((o) => (
-                        <div
-                            key={o}
-                            className="cursor-pointer rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition hover:border-amber-700 hover:text-amber-700"
+                        <Link
+                            key={o.to}
+                            to={o.to}
+                            className="block rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium text-gray-700 transition hover:border-amber-700 hover:text-amber-700"
                         >
-                            {o}
-                        </div>
+                            {o.label}
+                        </Link>
                     ))}
                 </div>
 

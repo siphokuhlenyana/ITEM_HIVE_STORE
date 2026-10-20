@@ -1,4 +1,4 @@
-package za.ac.cput.transactionentity.dto;
+package za.ac.cput.itemhivesd2.domain;
 
 public class CheckoutRequest {
     private String buyerId;

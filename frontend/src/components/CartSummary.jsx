@@ -1,51 +1,6 @@
-/*
-import { useCart } from "../context/CartContext";
-
-export default function CartSummary(){
-    const { state } = useCart();
-    const { cartItems } = state;
-
-    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    const subTotal = cartItems.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
-    const discount = subTotal * 0.2;
-    const deliveryFee = 15;
-    const total = subTotal - discount + deliveryFee;
-
-    return (
-        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h1 className="mb-6 text-2xl font-bold text-gray-900">Order Summary</h1>
-
-            <div className="space-y-4 text-sm text-gray-700">
-                <div className="flex justify-between">
-                    <p>SubTotal</p>
-                    <p className="font-medium">R{subTotal}</p>
-                </div>
-
-                <div className="flex justify-between">
-                    <p>Total Item</p>
-                    <p className="font-medium">{totalItems}</p>
-                </div>
-
-                <div className="flex justify-between">
-                    <p>Discount (-20%)</p>
-                    <p className="font-medium text-green-600">R{discount}</p>
-                </div>
-
-                <div className="flex justify-between">
-                    <p>Delivery Fee</p>
-                    <p className="font-medium">R{deliveryFee}</p>
-                </div>
-            </div>
-            <div>
-                <p>Total</p>
-                <p>R{total}</p>
-            </div>
-            <button>Go to Checkout</button>
-        </div>
-    );
-}*/
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { api } from "../../utils/api";
 
 export default function CartSummary() {
     const { state } = useCart();
@@ -63,18 +18,17 @@ export default function CartSummary() {
         setLoading(true);
         setError("");
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/payments/create-checkout-session`, {
+            const data = await api("/api/payments/create-checkout-session", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    items: cartItems.map((i) => ({ productId: i.id, quantity: i.quantity })),
-                }),
+                body: { items: cartItems.map((i) => ({ productId: i.id, quantity: i.quantity })) },
             });
-            if (!res.ok) throw new Error("Could not start payment. Please try again.");
-            const data = await res.json();
             window.location.href = data.url; // go to Stripe's hosted page
         } catch (e) {
-            setError(e.message);
+            setError(
+                e.status === 401 || e.status === 403
+                    ? "Please log in to check out."
+                    : e.message
+            );
             setLoading(false);
         }
     };

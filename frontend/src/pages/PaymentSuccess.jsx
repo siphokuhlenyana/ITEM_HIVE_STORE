@@ -1,43 +1,7 @@
-/*import { useEffect, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext";
-
-export default function PaymentSuccess() {
-    const [params] = useSearchParams();
-    const sessionId = params.get("session_id");
-    const { dispatch } = useCart();
-    const navigate = useNavigate();
-    const [status, setStatus] = useState("checking");
-
-    useEffect(() => {
-        if (!sessionId) { setStatus("failed"); return; }
-        fetch(`${import.meta.env.VITE_API_URL}/api/payments/status/${sessionId}`)
-            .then((res) => res.text())
-            .then((text) => {
-                if (text === "paid") {
-                    setStatus("paid");
-                    dispatch({ type: "CLEAR_CART" });
-                } else {
-                    setStatus("failed");
-                }
-            })
-            .catch(() => setStatus("failed"));
-    }, [sessionId, dispatch]);
-
-    return (
-        <div className="mx-auto flex min-h-[60vh] max-w-xl flex-col items-center justify-center px-4 text-center">
-            {status === "checking" && <h1 className="text-2xl font-bold">Confirming your payment...</h1>}
-            {status === "paid" && <h1 className="text-3xl font-bold text-green-600">Payment successful. Thank you!</h1>}
-            {status === "failed" && <h1 className="text-2xl font-bold text-red-600">We couldn't confirm your payment.</h1>}
-            <button onClick={() => navigate("/")} className="mt-6 rounded-lg bg-black px-6 py-3 text-white hover:bg-amber-700">
-                Back to store
-            </button>
-        </div>
-    );
-}*/
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { load, save } from "../../utils/storage";
 import SuccessCard from "../components/SuccessCard";
 
 export default function PaymentSuccess() {
@@ -47,7 +11,7 @@ export default function PaymentSuccess() {
     const navigate = useNavigate();
     const [status, setStatus] = useState("checking");
 
-// Take a snapshot of the cart before it is cleared (same rules as CartSummary)
+    // Take a snapshot of the cart before it is cleared (same rules as CartSummary)
     const [summary] = useState(() => {
         const items = state.cartItems;
         if (items.length === 0) return null;
@@ -55,6 +19,12 @@ export default function PaymentSuccess() {
         return {
             itemCount: items.reduce((sum, i) => sum + i.quantity, 0),
             total: subTotal * 0.8 + 15,
+            items: items.map((i) => ({
+                id: i.id,
+                name: i.name,
+                price: Number(i.price),
+                quantity: i.quantity,
+            })),
         };
     });
 
@@ -70,6 +40,26 @@ export default function PaymentSuccess() {
                 if (cancelled) return;
                 if (text === "paid") {
                     setStatus("paid");
+
+                    // Save the order so it appears on the Orders page (once per payment).
+                    if (summary) {
+                        const session = load("itemhive_session", null);
+                        const orders = load("itemhive_orders", []);
+                        if (!orders.some((o) => o.id === sessionId)) {
+                            save("itemhive_orders", [
+                                {
+                                    id: sessionId,
+                                    email: session?.email || "guest",
+                                    date: new Date().toISOString(),
+                                    items: summary.items,
+                                    total: summary.total,
+                                    status: "Paid",
+                                },
+                                ...orders,
+                            ]);
+                        }
+                    }
+
                     dispatch({ type: "CLEAR_CART" });
                 } else {
                     setStatus("failed");
@@ -77,7 +67,7 @@ export default function PaymentSuccess() {
             })
             .catch(() => !cancelled && setStatus("failed"));
         return () => { cancelled = true; };
-    }, [sessionId, dispatch]);
+    }, [sessionId, dispatch, summary]);
 
     if (status === "checking") {
         return (
@@ -122,10 +112,11 @@ export default function PaymentSuccess() {
             message="Thank you for shopping at Itemhive Store. Your order has been received."
             details={details}
             actions={[
+                { label: "View my orders", to: "/orders", variant: "green" },
                 { label: "Continue shopping", to: "/", variant: "green" },
                 { label: "Print receipt", onClick: () => window.print(), variant: "blue" },
             ]}
-            redirectTo="/"
+            redirectTo="/orders"
             seconds={15}
         />
     );

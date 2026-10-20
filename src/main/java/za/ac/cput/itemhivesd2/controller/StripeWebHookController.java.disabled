@@ -1,4 +1,4 @@
-package za.ac.cput.transactionentity.controller;
+package za.ac.cput.itemhivesd2.controller;
 
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
@@ -9,21 +9,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.transactionentity.domain.Transaction;
-import za.ac.cput.transactionentity.repository.TransactionRepository;
+import za.ac.cput.itemhivesd2.domain.Transaction;
+import za.ac.cput.itemhivesd2.repository.TransactionRepository;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/stripe")
-public class StripeWebhookController {
+public class StripeWebHookController {
 
     @Value("${stripe.webhook.secret}")
     private String webhookSecret;
 
     private final TransactionRepository transactionRepository;
 
-    public StripeWebhookController(TransactionRepository transactionRepository) {
+    public StripeWebHookController(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 
