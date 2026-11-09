@@ -1,4 +1,4 @@
-package za.ac.cput.domain;
+package za.ac.cput.itemhivesd2.domain;
 /*
 BuyerIdGenerator.java
 Buyer ID Generator model class
