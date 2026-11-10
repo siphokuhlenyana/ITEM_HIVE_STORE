@@ -1,8 +1,8 @@
-package za.ac.cput.controller;
+package za.ac.cput.itemhivesd2.controller;
 
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.domain.Student;
-import za.ac.cput.service.StudentService;
+import za.ac.cput.itemhivesd2.domain.Student;
+import za.ac.cput.itemhivesd2.service.StudentService;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ Date: June 2026
 */
 
 @RestController
-@RequestMapping("api/student")
+@RequestMapping("/api/student")
 public class StudentController {
 
     private final StudentService serv;

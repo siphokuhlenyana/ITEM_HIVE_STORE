@@ -1,4 +1,4 @@
-package za.ac.cput.listing.service;
+package za.ac.cput.itemhivesd2.service;
 
 /*ListingService.java
   ListingProduct
@@ -7,51 +7,44 @@ package za.ac.cput.listing.service;
  */
 
 import org.springframework.stereotype.Service;
-import za.ac.cput.listing.domain.Listing;
-import za.ac.cput.listing.repository.ListingRepositoryImpl;
+import za.ac.cput.itemhivesd2.domain.Listing;
+import za.ac.cput.itemhivesd2.repository.ListingRepository;
 
 import java.util.List;
 
 @Service
 public class ListingService implements IListingService {
 
-    private final ListingRepositoryImpl repository;
+    private final ListingRepository repository;
 
-    private static ListingService service = null;
-
-    private ListingService() {
-        this.repository = ListingRepositoryImpl.getRepository();
-    }
-
-    public static ListingService getService() {
-        if (service == null) {
-            service = new ListingService();
-        }
-        return service;
+    public ListingService(ListingRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public Listing create(Listing listing) {
-        return repository.create(listing);
+        return repository.save(listing);
     }
 
     @Override
     public Listing read(String listingId) {
-        return repository.read(listingId);
+        return repository.findById(listingId).orElse(null);
     }
 
     @Override
     public Listing update(Listing listing) {
-        return repository.update(listing);
+        return repository.save(listing);
     }
 
     @Override
     public boolean delete(String listingId) {
-        return repository.delete(listingId);
+        if (!repository.existsById(listingId)) return false;
+        repository.deleteById(listingId);
+        return true;
     }
 
     @Override
     public List<Listing> getAll() {
-        return repository.getAll();
+        return repository.findAll();
     }
 }

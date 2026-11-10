@@ -1,9 +1,9 @@
-package za.ac.cput.listing.controller;
+package za.ac.cput.itemhivesd2.controller;
 
 
 import org.springframework.web.bind.annotation.*;
-import za.ac.cput.listing.domain.Listing;
-import za.ac.cput.listing.service.ListingService;
+import za.ac.cput.itemhivesd2.domain.Listing;
+import za.ac.cput.itemhivesd2.service.ListingService;
 
 import java.util.List;
 
@@ -22,9 +22,9 @@ public class ListingController {
         return service.create(listing);
     }
 
-   @GetMapping("{/ListingId}")
-    public Listing read(@PathVariable String ListingId) {
-        return service.read(ListingId);
+   @GetMapping("/{listingId}")
+    public Listing read(@PathVariable String listingId) {
+        return service.read(listingId);
    }
 
    @GetMapping
@@ -37,8 +37,8 @@ public class ListingController {
         return service.update(listing);
    }
 
-   @DeleteMapping("/ListingId")
-    public boolean delete(@PathVariable String ListingId){
-        return service.delete(ListingId);
+   @DeleteMapping("/{listingId}")
+    public boolean delete(@PathVariable String listingId){
+        return service.delete(listingId);
    }
 }

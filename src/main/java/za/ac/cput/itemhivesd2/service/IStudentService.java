@@ -1,6 +1,6 @@
-package za.ac.cput.service;
+package za.ac.cput.itemhivesd2.service;
 
-import za.ac.cput.domain.Student;
+import za.ac.cput.itemhivesd2.domain.Student;
 
 import java.util.List;
 

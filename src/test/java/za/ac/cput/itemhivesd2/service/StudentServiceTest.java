@@ -1,4 +1,4 @@
-package za.ac.cput.service;
+package za.ac.cput.itemhivesd2.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -6,13 +6,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import za.ac.cput.domain.Student;
-import za.ac.cput.factory.StudentFactory;
-import za.ac.cput.repository.StudentRepository;
-import za.ac.cput.service.StudentService;
+import za.ac.cput.itemhivesd2.domain.Student;
+import za.ac.cput.itemhivesd2.repository.StudentRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
@@ -30,67 +30,55 @@ public class StudentServiceTest {
     @Mock
     private StudentRepository repository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private StudentService service;
 
     @Test
     void testCreate() {
 
-        Student student = mock(Student.class);
+        Student student = new Student();
+        student.setName("Mihle");
+        student.setEmail("mihle@gmail.com");
+        student.setPassword("12345");
+        when(repository.existsByEmailIgnoreCase(student.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode("12345")).thenReturn("hashed-password");
+        when(repository.save(any(Student.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        when(student.getName()).thenReturn("Mihle");
-        when(student.getEmail()).thenReturn("mihle@gmail.com");
-        when(student.getPassword()).thenReturn("12345");
+        Student result = service.create(student);
 
-        try (MockedStatic<StudentFactory> factory = mockStatic(StudentFactory.class)) {
-
-            factory.when(() ->
-                            StudentFactory.createStudent(
-                                    "Mihle",
-                                    "mihle@gmail.com",
-                                    "12345"))
-                    .thenReturn(student);
-
-            when(repository.save(student)).thenReturn(student);
-
-            Student result = service.create(student);
-
-            assertNotNull(result);
-            verify(repository).save(student);
-        }
+        assertNotNull(result);
+        assertEquals("hashed-password", result.getPassword());
+        verify(repository).save(any(Student.class));
     }
 
     @Test
     void testUpdate() {
 
-        Student student = mock(Student.class);
+        Student student = new Student();
+        student.setId("STU001");
+        student.setName("Mihle Updated");
+        student.setEmail("mihle@gmail.com");
+        student.setPassword("new-password");
+        Student existing = new Student();
+        existing.setId("STU001");
+        when(repository.findById("STU001")).thenReturn(java.util.Optional.of(existing));
+        when(passwordEncoder.encode("new-password")).thenReturn("hashed-password");
+        when(repository.save(existing)).thenReturn(existing);
 
-        when(student.getName()).thenReturn("Mihle");
-        when(student.getEmail()).thenReturn("mihle@gmail.com");
-        when(student.getPassword()).thenReturn("12345");
+        Student result = service.update(student);
 
-        try (MockedStatic<StudentFactory> factory = mockStatic(StudentFactory.class)) {
-
-            factory.when(() ->
-                            StudentFactory.createStudent(
-                                    "Mihle",
-                                    "mihle@gmail.com",
-                                    "12345"))
-                    .thenReturn(student);
-
-            when(repository.save(student)).thenReturn(student);
-
-            Student result = service.update(student);
-
-            assertNotNull(result);
-            verify(repository).save(student);
-        }
+        assertNotNull(result);
+        assertEquals("hashed-password", result.getPassword());
+        verify(repository).save(existing);
     }
 
     @Test
     void testRead() {
 
-        Student student = mock(Student.class);
+        Student student = new Student();
 
         when(repository.findById("STU001"))
                 .thenReturn(java.util.Optional.of(student));

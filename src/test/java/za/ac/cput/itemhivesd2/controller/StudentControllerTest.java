@@ -1,11 +1,11 @@
-package za.ac.cput.controller;
+package za.ac.cput.itemhivesd2.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import za.ac.cput.service.StudentService;
+import za.ac.cput.itemhivesd2.service.StudentService;
 
 import java.util.List;
 

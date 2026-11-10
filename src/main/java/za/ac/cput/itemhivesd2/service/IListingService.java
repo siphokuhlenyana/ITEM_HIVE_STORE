@@ -1,4 +1,4 @@
-package za.ac.cput.listing.service;
+package za.ac.cput.itemhivesd2.service;
 
 /*IService.java
   ListingProduct
@@ -7,7 +7,7 @@ package za.ac.cput.listing.service;
  */
 
 
-import za.ac.cput.listing.domain.Listing;
+import za.ac.cput.itemhivesd2.domain.Listing;
 
 import java.util.List;
 
